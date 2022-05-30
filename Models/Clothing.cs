@@ -6,9 +6,12 @@ namespace RFClothingModifier.Models
     {
         [XmlAttribute]
         public ushort ItemId { get; set; }
-        [XmlAttribute]
+
+        public float Armor { get; set; } = 1f;
+        public float ExplosionArmor { get; set; } = 1f;
+        public bool Fireproof { get; set; }
+        public bool Radiationproof { get; set; }
         public byte Width { get; set; }
-        [XmlAttribute]
         public byte Height { get; set; }
 
         public override bool Equals(object obj)

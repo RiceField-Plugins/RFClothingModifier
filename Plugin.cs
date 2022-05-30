@@ -1,9 +1,8 @@
-﻿using RFClothingModifier.Utils;
-using Rocket.API.Collections;
+﻿using System.Collections.Generic;
+using RFClothingModifier.Models;
+using RFClothingModifier.Utils;
 using Rocket.Core.Plugins;
-using Rocket.Unturned.Chat;
 using SDG.Unturned;
-using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
 namespace RFClothingModifier
@@ -12,10 +11,11 @@ namespace RFClothingModifier
     {
         private static int Major = 1;
         private static int Minor = 0;
-        private static int Patch = 0;
+        private static int Patch = 1;
         
         public static Plugin Inst;
         public static Configuration Conf;
+        internal static HashSet<Clothing> OriginalClothing;
 
         protected override void Load()
         {
@@ -23,6 +23,8 @@ namespace RFClothingModifier
             Conf = Configuration.Instance;
             if (Conf.Enabled)
             {
+                OriginalClothing = new HashSet<Clothing>();
+                
                 Level.onPostLevelLoaded += OnPostLevelLoaded;
                 
                 if (Level.isLoaded)
@@ -41,6 +43,13 @@ namespace RFClothingModifier
             if (Conf.Enabled)
             {
                 Level.onPostLevelLoaded -= OnPostLevelLoaded;
+                
+                if (Level.isLoaded && Conf.RevertOnUnload)
+                    foreach (var clothing in OriginalClothing)
+                        ClothUtil.Modify(clothing, true);
+                
+                OriginalClothing.Clear();
+                OriginalClothing.TrimExcess();
             }
             
             Conf = null;

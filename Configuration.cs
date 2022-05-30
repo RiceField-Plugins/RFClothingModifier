@@ -7,10 +7,12 @@ namespace RFClothingModifier
     public class Configuration : IRocketPluginConfiguration
     {
         public bool Enabled;
+        public bool RevertOnUnload;
         public HashSet<Clothing> Clothings;
         public void LoadDefaults()
         {
             Enabled = true;
+            RevertOnUnload = true;
             Clothings = new HashSet<Clothing>
             {
                 new() {ItemId = 253, Height = 10, Width = 10},
